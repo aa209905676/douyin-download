@@ -19,6 +19,39 @@
   }
 }
 
+/* Custom animations for language switcher */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slideInFromTop {
+  from { 
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+  to { 
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-in {
+  animation: fadeIn 0.2s ease-out, slideInFromTop 0.2s ease-out;
+}
+
+.fade-in {
+  animation: fadeIn 0.2s ease-out;
+}
+
+.slide-in-from-top-2 {
+  animation: slideInFromTop 0.2s ease-out;
+}
+
+.duration-200 {
+  animation-duration: 0.2s;
+}
+
 body {
   background: var(--background);
   color: var(--foreground);

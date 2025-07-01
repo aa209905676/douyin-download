@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>语言切换器测试</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-50 p-8">
+    <div class="max-w-md mx-auto">
+        <h1 class="text-2xl font-bold mb-4">语言切换器样式测试</h1>
+        
+        <!-- 新的简单语言切换器 -->
+        <div class="relative">
+            <button class="flex items-center gap-2 px-3 py-2 text-gray-600 hover:text-gray-800 hover:bg-gray-100 rounded-md transition-colors duration-200">
+                <span class="text-base">🇨🇳</span>
+                <span class="text-sm font-medium">中文</span>
+                <svg class="w-4 h-4 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                </svg>
+            </button>
+            
+            <!-- 下拉菜单示例 -->
+            <div class="absolute top-full right-0 mt-2 w-36 bg-white border border-gray-200 rounded-lg shadow-lg z-50 py-1">
+                <button class="w-full flex items-center gap-3 px-3 py-2 text-left text-blue-600 bg-blue-50 transition-colors duration-150">
+                    <span class="text-base">🇨🇳</span>
+                    <span class="text-sm font-medium">中文</span>
+                    <span class="ml-auto text-blue-600">✓</span>
+                </button>
+                <button class="w-full flex items-center gap-3 px-3 py-2 text-left text-gray-700 hover:bg-gray-50 transition-colors duration-150">
+                    <span class="text-base">🇺🇸</span>
+                    <span class="text-sm font-medium">English</span>
+                </button>
+            </div>
+        </div>
+        
+        <div class="mt-8 p-4 bg-white rounded-lg border-2 border-gray-300">
+            <h2 class="text-lg font-semibold mb-2">测试说明：</h2>
+            <ul class="text-sm text-gray-700 space-y-1">
+                <li>• 使用灰色字体 (text-gray-600)</li>
+                <li>• 简洁的悬停效果 (hover:bg-gray-100)</li>
+                <li>• 清晰的选中状态 (text-blue-600 bg-blue-50)</li>
+                <li>• 简单的对勾标记 (✓)</li>
+            </ul>
+        </div>
+    </div>
+</body>
+</html>

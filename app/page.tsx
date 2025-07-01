@@ -1,6 +1,8 @@
 'use client'
 
 import { useState, useEffect } from 'react'
+import { useLanguage } from '../lib/hooks/useLanguage'
+import SimpleLanguageSwitcher from './components/SimpleLanguageSwitcher'
 
 interface VideoInfo {
   title: string
@@ -15,37 +17,38 @@ interface VideoInfo {
   }
 }
 
-const getFriendlyErrorMessage = (error: string, code: string) => {
+const getFriendlyErrorMessage = (error: string, code: string, t: any) => {
   switch (code) {
     case 'NO_PARSER_AVAILABLE':
-      return '视频解析服务暂时不可用，我们正在努力修复中。请稍后重试或联系技术支持。'
+      return t.errors.noParserAvailable
     case 'ALL_PARSERS_FAILED':
-      return '所有解析服务都暂时无法使用。这可能是由于服务器维护或网络问题导致的，请稍后重试。'
+      return t.errors.allParsersFailed
     case 'API_REQUEST_FAILED':
-      return '解析服务响应异常，请稍后重试。如果问题持续存在，可能是服务器正在维护中。'
+      return t.errors.apiRequestFailed
     case 'API_ERROR':
-      return '视频解析失败，请检查视频链接是否正确，或者该视频可能无法下载（私密视频或已删除）。'
+      return t.errors.apiError
     case 'NETWORK_ERROR':
-      return '网络连接出现问题，请检查网络连接后重试。'
+      return t.errors.networkErrorCode
     case 'NO_DOWNLOAD_URL':
-      return '无法获取该视频的下载链接，可能是视频设置了下载限制或格式不支持。'
+      return t.errors.noDownloadUrl
     case 'NO_FORMAT_URL':
-      return '请求的格式不可用，请尝试其他格式或稍后重试。'
+      return t.errors.noFormatUrl
     default:
       if (error?.includes('Invalid URL')) {
-        return '请输入有效的 TikTok 或抖音视频链接。支持的格式包括：分享链接、短链接和完整链接。'
+        return t.errors.invalidUrl
       }
       if (error?.includes('timeout')) {
-        return '请求超时，服务器响应较慢。请稍后重试。'
+        return t.errors.timeout
       }
       if (error?.includes('400') || error?.includes('Bad Request')) {
-        return '视频链接格式有误或该视频无法解析。请检查链接是否正确。'
+        return t.errors.badRequest
       }
-      return `服务暂时不可用：${error}。我们正在努力解决问题，请稍后重试。`
+      return `${t.errors.defaultError}: ${error}`
   }
 }
 
 export default function Home() {
+  const { t } = useLanguage()
   const [url, setUrl] = useState('')
   const [loading, setLoading] = useState(false)
   const [videoInfo, setVideoInfo] = useState<VideoInfo | null>(null)
@@ -77,11 +80,11 @@ export default function Home() {
         setVideoInfo(data)
       } else {
         // 根据错误类型提供友好的提示
-        const friendlyError = getFriendlyErrorMessage(data.error, data.code)
+        const friendlyError = getFriendlyErrorMessage(data.error, data.code, t)
         setError(friendlyError)
       }
     } catch {
-      setError('网络连接失败，请检查网络连接后重试。如果问题持续存在，请稍后再试。')
+      setError(t.errors.networkError)
     } finally {
       setLoading(false)
     }
@@ -107,11 +110,11 @@ export default function Home() {
         link.click()
         document.body.removeChild(link)
       } else {
-        const friendlyError = getFriendlyErrorMessage(data.error, data.code)
-        setError(`下载失败：${friendlyError}`)
+        const friendlyError = getFriendlyErrorMessage(data.error, data.code, t)
+        setError(`${t.errors.downloadFailed}：${friendlyError}`)
       }
     } catch {
-      setError('下载失败，网络连接出现问题。请检查网络连接后重试。')
+      setError(`${t.errors.downloadFailed}，${t.errors.networkError}`)
     }
   }
 
@@ -131,9 +134,12 @@ export default function Home() {
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M9 19l3 3m0 0l3-3m-3 3V10" />
                 </svg>
               </div>
-              <h1 className="text-2xl font-semibold text-gray-900">TikTok Downloader</h1>
+              <h1 className="text-2xl font-semibold text-gray-900">{t.appTitle}</h1>
             </div>
-            <div className="text-sm text-gray-500">Free & Fast</div>
+            <div className="flex items-center space-x-4">
+              <div className="text-sm text-gray-500">{t.appSubtitle}</div>
+              <SimpleLanguageSwitcher />
+            </div>
           </div>
         </div>
       </header>
@@ -143,15 +149,14 @@ export default function Home() {
         {/* Hero Section */}
         <div className="text-center mb-16">
           <h2 className="text-5xl font-bold text-gray-900 mb-6 leading-tight">
-            Download TikTok videos
+            {t.heroTitle}
             <br />
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-purple-600">
-              without watermarks
+              {t.heroSubtitle}
             </span>
           </h2>
           <p className="text-xl text-gray-600 mb-8 max-w-2xl mx-auto leading-relaxed">
-            Paste any TikTok or Douyin video link and download it in seconds. 
-            High quality, no watermarks, completely free.
+            {t.heroDescription}
           </p>
         </div>
 
@@ -163,7 +168,7 @@ export default function Home() {
                 type="text"
                 value={url}
                 onChange={(e) => setUrl(e.target.value)}
-                placeholder="请粘贴 TikTok 或抖音视频链接..."
+                placeholder={t.inputPlaceholder}
                 className="w-full px-6 py-4 text-lg bg-gray-50 border border-gray-200 rounded-xl text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
                 required
               />
@@ -177,10 +182,10 @@ export default function Home() {
               {loading ? (
                 <span className="flex items-center justify-center space-x-2">
                   <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
-                  <span>正在解析视频...</span>
+                  <span>{t.processingButton}</span>
                 </span>
               ) : (
-                '获取视频信息'
+                t.getInfoButton
               )}
             </button>
           </form>
@@ -196,22 +201,22 @@ export default function Home() {
                 </svg>
               </div>
               <div className="flex-1">
-                <h4 className="text-red-800 font-semibold text-lg mb-2">服务暂时不可用</h4>
+                <h4 className="text-red-800 font-semibold text-lg mb-2">{t.errors.serviceUnavailable}</h4>
                 <p className="text-red-700 leading-relaxed mb-4">{error}</p>
                 <div className="bg-red-100 rounded-lg p-4 border border-red-200">
-                  <h5 className="text-red-800 font-medium mb-2">💡 解决建议：</h5>
+                  <h5 className="text-red-800 font-medium mb-2">{t.errors.suggestions}</h5>
                   <ul className="text-red-700 text-sm space-y-1">
-                    <li>• 检查视频链接是否完整和正确</li>
-                    <li>• 确保视频是公开的（非私密设置）</li>
-                    <li>• 稍后重试，服务可能正在维护中</li>
-                    <li>• 尝试使用其他 TikTok 或抖音链接</li>
+                    <li>• {t.errors.suggestionsList.checkLink}</li>
+                    <li>• {t.errors.suggestionsList.ensurePublic}</li>
+                    <li>• {t.errors.suggestionsList.retryLater}</li>
+                    <li>• {t.errors.suggestionsList.tryOther}</li>
                   </ul>
                 </div>
                 <button
                   onClick={() => setError('')}
                   className="mt-4 px-4 py-2 bg-red-600 hover:bg-red-700 text-white text-sm font-medium rounded-lg transition-colors duration-200"
                 >
-                  重新尝试
+                  {t.errors.retryButton}
                 </button>
               </div>
             </div>
@@ -243,18 +248,18 @@ export default function Home() {
                       {videoInfo.title}
                     </h3>
                     <div className="flex items-center space-x-4 text-gray-600">
-                      <span>👤 {videoInfo.author}</span>
-                      <span>⏱️ {Math.floor(videoInfo.duration / 60)}:{(videoInfo.duration % 60).toString().padStart(2, '0')}</span>
+                      <span>👤 {t.videoAuthor}: {videoInfo.author}</span>
+                      <span>⏱️ {t.videoDuration}: {Math.floor(videoInfo.duration / 60)}:{(videoInfo.duration % 60).toString().padStart(2, '0')}</span>
                     </div>
                   </div>
                   
                   {/* Stats */}
                   <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
                     {[
-                      { label: 'Likes', value: videoInfo.stats.likes, color: 'text-pink-600', icon: '❤️' },
-                      { label: 'Views', value: videoInfo.stats.views, color: 'text-blue-600', icon: '👁️' },
-                      { label: 'Comments', value: videoInfo.stats.comments, color: 'text-green-600', icon: '💬' },
-                      { label: 'Shares', value: videoInfo.stats.shares, color: 'text-purple-600', icon: '📤' }
+                      { label: t.statsLikes, value: videoInfo.stats.likes, color: 'text-pink-600', icon: '❤️' },
+                      { label: t.statsViews, value: videoInfo.stats.views, color: 'text-blue-600', icon: '👁️' },
+                      { label: t.statsComments, value: videoInfo.stats.comments, color: 'text-green-600', icon: '💬' },
+                      { label: t.statsShares, value: videoInfo.stats.shares, color: 'text-purple-600', icon: '📤' }
                     ].map((stat) => (
                       <div key={stat.label} className="text-center p-4 bg-gray-50 rounded-xl">
                         <div className="text-2xl mb-1">{stat.icon}</div>
@@ -275,7 +280,7 @@ export default function Home() {
                       <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
                       </svg>
-                      <span>Download Video</span>
+                      <span>{t.downloadVideo}</span>
                     </button>
                     <button
                       onClick={() => handleDownload('audio')}
@@ -284,7 +289,7 @@ export default function Home() {
                       <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19V6l12-3v13M9 19c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zm12-3c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zM9 10l12-3" />
                       </svg>
-                      <span>Download Audio</span>
+                      <span>{t.downloadAudio}</span>
                     </button>
                   </div>
                 </div>
@@ -298,18 +303,18 @@ export default function Home() {
           {[
             {
               icon: '⚡',
-              title: 'Lightning Fast',
-              description: 'Download videos in seconds with our optimized servers'
+              title: t.featureFastTitle,
+              description: t.featureFastDesc
             },
             {
               icon: '🎯',
-              title: 'No Watermarks',
-              description: 'Get clean videos without any watermarks or logos'
+              title: t.featureNoWatermarkTitle,
+              description: t.featureNoWatermarkDesc
             },
             {
               icon: '🔒',
-              title: 'Privacy First',
-              description: 'No registration required, your data stays private'
+              title: t.featurePrivacyTitle,
+              description: t.featurePrivacyDesc
             }
           ].map((feature, index) => (
             <div key={index} className="text-center p-6 bg-white rounded-2xl shadow-sm border border-gray-200/50">
@@ -322,9 +327,9 @@ export default function Home() {
 
         {/* Supported Formats */}
         <div className="text-center mb-16">
-          <h3 className="text-2xl font-semibold text-gray-900 mb-6">Supported Platforms</h3>
+          <h3 className="text-2xl font-semibold text-gray-900 mb-6">{t.supportedPlatforms}</h3>
           <div className="flex flex-wrap justify-center gap-4">
-            {['TikTok', 'Douyin', 'Short Links', 'Share Links'].map((platform) => (
+            {[t.platforms.tiktok, t.platforms.douyin, t.platforms.shortLinks, t.platforms.shareLinks].map((platform) => (
               <span key={platform} className="px-4 py-2 bg-gray-100 text-gray-700 rounded-full text-sm font-medium">
                 {platform}
               </span>
@@ -338,9 +343,9 @@ export default function Home() {
         <div className="max-w-4xl mx-auto px-6 py-8">
           <div className="text-center text-gray-500">
             <p className="text-sm">
-              © 2024 TikTok Downloader. Made with ❤️ for creators. 
+              {t.footerCopyright}
               <br className="sm:hidden" />
-              <span className="text-xs opacity-75 ml-2">For educational purposes only.</span>
+              <span className="text-xs opacity-75 ml-2">{t.footerEducational}</span>
             </p>
           </div>
         </div>

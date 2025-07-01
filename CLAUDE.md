@@ -4,9 +4,10 @@
 一个基于 Next.js 的抖音/TikTok视频下载网站，支持通过链接下载无水印视频。采用策略模式设计，支持多种解析方式，默认使用第三方API解析，支持多层级容错机制。
 
 ## 技术栈
-- **前端**: Next.js 14 (App Router) + TypeScript + Tailwind CSS
+- **前端**: Next.js 15 (App Router) + TypeScript + Tailwind CSS
 - **后端**: Next.js API Routes
 - **视频解析**: 第三方API (默认) / Python库 / 网页解析
+- **国际化**: React Context + localStorage (支持中文/英文)
 - **部署**: Vercel
 
 ## 项目结构
@@ -23,9 +24,17 @@ tiktok-downloader/
 │   ├── parsers/          # 解析器实现
 │   │   ├── interface.ts  # 解析器接口
 │   │   ├── hybrid-api.ts # Hybrid-API解析器
+│   │   ├── local-api.ts  # 本地API解析器
 │   │   ├── registry.ts   # 解析器注册中心
 │   │   └── index.ts      # 解析器管理器
-│   └── config/           # 配置管理
+│   ├── i18n/            # 国际化
+│   │   ├── types.ts     # 类型定义
+│   │   ├── translations/ # 翻译文件
+│   │   │   ├── zh.ts    # 中文
+│   │   │   └── en.ts    # 英文
+│   │   └── index.ts     # 导出
+│   └── hooks/           # React Hooks
+│       └── useLanguage.tsx # 语言Hook
 └── config/               # 配置文件
     └── parsers.json      # 解析器配置
 ```
@@ -80,6 +89,49 @@ interface VideoInfo {
 - **细粒度控制**: 每个API独立配置和重试
 - **容错能力**: 多层级备份策略
 - **可配置**: 通过配置文件灵活调整策略和优先级
+
+## 国际化 (i18n) 系统
+
+### 支持语言
+- **中文 (zh)**: 简体中文，默认语言
+- **英文 (en)**: English
+
+### 架构设计
+```typescript
+// 语言类型定义
+type Language = 'zh' | 'en'
+
+// 翻译接口
+interface Translation {
+  appTitle: string
+  heroTitle: string
+  // ... 其他翻译键
+}
+
+// 使用Context + Hook
+const { t, language, setLanguage } = useLanguage()
+```
+
+### 功能特性
+- **自动检测**: 首次访问根据浏览器语言自动设置
+- **持久化**: localStorage 保存用户语言偏好
+- **组件化**: 独立的语言切换器组件
+- **Apple风格**: 现代化下拉菜单设计
+- **响应式**: 移动端适配和优化
+- **SSR友好**: 避免水合不匹配问题
+
+### 语言切换器特性
+- **视觉效果**: 国旗图标 + 语言名称
+- **交互优化**: 悬停效果、动画过渡
+- **移动适配**: 触摸友好、背景遮罩
+- **状态指示**: 当前语言高亮显示
+- **键盘导航**: 支持键盘操作
+
+### 翻译覆盖范围
+- 界面文本: 标题、按钮、提示信息
+- 错误消息: 多种错误场景的友好提示
+- 功能说明: 特性介绍、使用指南
+- 表单输入: 占位符、验证信息
 
 ## API 设计
 
