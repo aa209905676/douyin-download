@@ -1,0 +1,69 @@
+{
+  "defaultStrategy": "api",
+  "strategies": {
+    "api": {
+      "priority": 1,
+      "retries": 2,
+      "parsers": [
+        {
+          "type": "hybrid-api",
+          "name": "HybridAPI",
+          "priority": 1,
+          "enabled": true,
+          "config": {
+            "baseUrl": "https://api.douyin.wtf",
+            "timeout": 10000
+          }
+        },
+        {
+          "type": "local-api",
+          "name": "LocalAPI",
+          "priority": 2,
+          "enabled": true,
+          "config": {
+            "baseUrl": "http://127.0.0.1:6666",
+            "timeout": 10000
+          }
+        }
+      ]
+    },
+    "python": {
+      "priority": 2,
+      "retries": 1,
+      "parsers": [
+        {
+          "type": "python-scraper",
+          "name": "PythonScraper",
+          "priority": 1,
+          "enabled": false,
+          "config": {
+            "pythonPath": "python3",
+            "scriptPath": "./python/scraper.py"
+          }
+        }
+      ]
+    },
+    "other": {
+      "priority": 3,
+      "retries": 1,
+      "parsers": [
+        {
+          "type": "web-scraper",
+          "name": "WebScraper",
+          "priority": 1,
+          "enabled": false,
+          "config": {}
+        }
+      ]
+    }
+  },
+  "rateLimit": {
+    "maxRequestsPerMinute": 10,
+    "maxConcurrentDownloads": 3
+  },
+  "download": {
+    "maxFileSizeMB": 500,
+    "tempDirectory": "/tmp/tiktok-downloads",
+    "cleanupIntervalMinutes": 30
+  }
+}
