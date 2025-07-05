@@ -54,6 +54,23 @@ const getFriendlyErrorMessage = (error: string, code: string, t: any) => {
   }
 }
 
+// 链接验证函数
+const isValidVideoUrl = (url: string): boolean => {
+  const patterns = [
+    // 抖音链接
+    /https?:\/\/(?:www\.)?douyin\.com\/video\/\d+/,
+    /https?:\/\/v\.douyin\.com\/[\w_]+/,
+    /https?:\/\/(?:www\.)?douyin\.com\/discover\?modal_id=\d+/,
+    // TikTok链接
+    /https?:\/\/(?:www\.)?tiktok\.com\/@[\w.-]+\/video\/\d+/,
+    /https?:\/\/(?:www\.)?tiktok\.com\/t\/[\w]+/,
+    /https?:\/\/vm\.tiktok\.com\/[\w]+/,
+    /https?:\/\/vt\.tiktok\.com\/[\w]+/
+  ]
+
+  return patterns.some(pattern => pattern.test(url.trim()))
+}
+
 export default function Home() {
   const { t } = useLanguage()
   const [url, setUrl] = useState('')
@@ -61,15 +78,38 @@ export default function Home() {
   const [videoInfo, setVideoInfo] = useState<VideoInfo | null>(null)
   const [error, setError] = useState('')
   const [mounted, setMounted] = useState(false)
+  const [urlError, setUrlError] = useState('')
 
   useEffect(() => {
     setMounted(true)
   }, [])
 
+  // 处理URL输入变化
+  const handleUrlChange = (value: string) => {
+    setUrl(value)
+    setUrlError('')
+    setError('')
+
+    // 如果输入不为空，验证链接格式
+    if (value.trim()) {
+      if (!isValidVideoUrl(value)) {
+        setUrlError('请输入有效的抖音或TikTok链接')
+      }
+    }
+  }
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
+
+    // 验证链接格式
+    if (!isValidVideoUrl(url)) {
+      setUrlError('请输入有效的抖音或TikTok链接')
+      return
+    }
+
     setLoading(true)
     setError('')
+    setUrlError('')
     setVideoInfo(null)
 
     try {
@@ -98,6 +138,12 @@ export default function Home() {
   }
 
   const handleDownload = async (format: 'video' | 'audio') => {
+    // 验证链接格式
+    if (!isValidVideoUrl(url)) {
+      setError('请输入有效的抖音或TikTok链接')
+      return
+    }
+
     try {
       // 直接跳转到下载API，触发浏览器下载对话框
       const downloadUrl = `/api/video/download?url=${encodeURIComponent(url)}&format=${format}`
@@ -158,16 +204,57 @@ export default function Home() {
               <input
                 type="text"
                 value={url}
-                onChange={(e) => setUrl(e.target.value)}
+                onChange={(e) => handleUrlChange(e.target.value)}
                 placeholder={t.inputPlaceholder}
-                className="w-full px-6 py-4 text-lg bg-gray-50 border border-gray-200 rounded-xl text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
+                className={`w-full px-6 py-4 text-lg bg-gray-50 border rounded-xl text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:border-transparent transition-all duration-200 ${
+                  urlError
+                    ? 'border-red-300 focus:ring-red-500'
+                    : url && isValidVideoUrl(url)
+                    ? 'border-green-300 focus:ring-green-500'
+                    : 'border-gray-200 focus:ring-blue-500'
+                }`}
                 required
               />
+              {/* 链接状态指示器 */}
+              {url && (
+                <div className="absolute right-4 top-1/2 transform -translate-y-1/2">
+                  {isValidVideoUrl(url) ? (
+                    <svg className="w-6 h-6 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                    </svg>
+                  ) : (
+                    <svg className="w-6 h-6 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                  )}
+                </div>
+              )}
             </div>
+
+            {/* URL错误提示 */}
+            {urlError && (
+              <div className="bg-red-50 border border-red-200 rounded-lg p-4">
+                <div className="flex items-center space-x-2">
+                  <svg className="w-5 h-5 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  </svg>
+                  <span className="text-red-700 font-medium">{urlError}</span>
+                </div>
+                <div className="mt-2 text-sm text-red-600">
+                  <p>支持的链接格式：</p>
+                  <ul className="mt-1 space-y-1">
+                    <li>• 抖音: https://v.douyin.com/xxx</li>
+                    <li>• 抖音: https://www.douyin.com/video/xxx</li>
+                    <li>• TikTok: https://www.tiktok.com/@xxx/video/xxx</li>
+                    <li>• TikTok: https://vm.tiktok.com/xxx</li>
+                  </ul>
+                </div>
+              </div>
+            )}
             
             <button
               type="submit"
-              disabled={loading || !url.trim()}
+              disabled={loading || !url.trim() || !isValidVideoUrl(url)}
               className="w-full sm:w-auto px-8 py-4 bg-blue-600 hover:bg-blue-700 disabled:bg-gray-300 disabled:cursor-not-allowed text-white font-semibold rounded-xl transition-all duration-200 transform hover:scale-[1.02] active:scale-[0.98] shadow-sm"
             >
               {loading ? (
