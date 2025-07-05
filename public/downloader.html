@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🎉 完美下载器</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center p-4">
+    <div class="bg-white rounded-2xl shadow-2xl p-8 max-w-lg w-full">
+        <div class="text-center mb-8">
+            <h1 class="text-3xl font-bold text-gray-800 mb-2">🎉 完美下载器</h1>
+            <p class="text-gray-600">粘贴链接，立即弹出下载对话框</p>
+        </div>
+        
+        <div class="space-y-6">
+            <!-- 输入框 -->
+            <div class="relative">
+                <input 
+                    type="text" 
+                    id="videoUrl" 
+                    placeholder="粘贴抖音或TikTok链接..."
+                    class="w-full p-4 pr-12 border-2 border-gray-200 rounded-xl focus:border-blue-500 focus:outline-none transition-colors text-lg"
+                    value="https://v.douyin.com/GZnbct7tGrs/"
+                >
+                <div class="absolute right-4 top-1/2 transform -translate-y-1/2">
+                    <svg class="w-6 h-6 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" />
+                    </svg>
+                </div>
+            </div>
+            
+            <!-- 下载按钮 -->
+            <div class="grid grid-cols-2 gap-4">
+                <button 
+                    onclick="downloadVideo()"
+                    class="flex items-center justify-center space-x-3 bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white font-bold py-5 px-6 rounded-xl transition-all duration-200 transform hover:scale-[1.02] shadow-lg text-lg"
+                >
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z" />
+                    </svg>
+                    <span>📹 下载视频</span>
+                </button>
+
+                <button 
+                    onclick="downloadAudio()"
+                    class="flex items-center justify-center space-x-3 bg-gradient-to-r from-purple-500 to-purple-600 hover:from-purple-600 hover:to-purple-700 text-white font-bold py-5 px-6 rounded-xl transition-all duration-200 transform hover:scale-[1.02] shadow-lg text-lg"
+                >
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19V6l12-3v13M9 19c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zm12-3c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zM9 10l12-3" />
+                    </svg>
+                    <span>🎵 下载音频</span>
+                </button>
+            </div>
+            
+            <!-- 状态显示 -->
+            <div id="status" class="text-center min-h-[80px] flex items-center justify-center">
+                <div class="text-gray-500 text-lg">
+                    👋 粘贴链接后点击下载按钮
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function downloadVideo() {
+            triggerDownload('video');
+        }
+        
+        function downloadAudio() {
+            triggerDownload('audio');
+        }
+        
+        function triggerDownload(format) {
+            const url = document.getElementById('videoUrl').value.trim();
+            const statusDiv = document.getElementById('status');
+            
+            if (!url) {
+                statusDiv.innerHTML = `
+                    <div class="text-red-600 font-bold text-lg">
+                        ❌ 请输入视频链接
+                    </div>
+                `;
+                return;
+            }
+            
+            try {
+                statusDiv.innerHTML = `
+                    <div class="text-blue-600 font-bold text-lg animate-pulse">
+                        🚀 正在准备${format === 'video' ? '视频' : '音频'}下载...
+                    </div>
+                `;
+                
+                // 构建下载URL
+                const downloadUrl = `http://localhost:3000/api/video/download?url=${encodeURIComponent(url)}&format=${format}`;
+                
+                console.log('触发下载:', downloadUrl);
+                
+                // 直接跳转到下载URL，浏览器会弹出下载对话框
+                window.location.href = downloadUrl;
+                
+                // 显示成功状态
+                setTimeout(() => {
+                    statusDiv.innerHTML = `
+                        <div class="text-green-600 font-bold text-lg">
+                            ✅ 下载已开始！<br>
+                            <div class="text-base text-gray-600 mt-2">检查浏览器下载栏</div>
+                        </div>
+                    `;
+                }, 1500);
+                
+            } catch (error) {
+                console.error('下载错误:', error);
+                statusDiv.innerHTML = `
+                    <div class="text-red-600 font-bold text-lg">
+                        ❌ 下载失败<br>
+                        <div class="text-base text-gray-600 mt-2">${error.message}</div>
+                    </div>
+                `;
+            }
+        }
+        
+        // 支持回车键
+        document.getElementById('videoUrl').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                downloadVideo();
+            }
+        });
+        
+        // 页面加载完成
+        window.onload = function() {
+            console.log('🎉 完美下载器加载完成！');
+            document.getElementById('videoUrl').focus();
+        };
+    </script>
+</body>
+</html>
