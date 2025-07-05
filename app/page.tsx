@@ -79,6 +79,7 @@ export default function Home() {
   const [error, setError] = useState('')
   const [mounted, setMounted] = useState(false)
   const [urlError, setUrlError] = useState('')
+  const [downloading, setDownloading] = useState(false)
 
   useEffect(() => {
     setMounted(true)
@@ -100,6 +101,11 @@ export default function Home() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
+
+    // 防抖：如果正在加载或下载，直接返回
+    if (loading || downloading) {
+      return
+    }
 
     // 验证链接格式
     if (!isValidVideoUrl(url)) {
@@ -138,6 +144,11 @@ export default function Home() {
   }
 
   const handleDownload = async (format: 'video' | 'audio') => {
+    // 防抖：如果正在下载，直接返回
+    if (downloading) {
+      return
+    }
+
     // 验证链接格式
     if (!isValidVideoUrl(url)) {
       setError('请输入有效的抖音或TikTok链接')
@@ -145,10 +156,20 @@ export default function Home() {
     }
 
     try {
+      setDownloading(true)
+      setError('')
+
       // 直接跳转到下载API，触发浏览器下载对话框
       const downloadUrl = `/api/video/download?url=${encodeURIComponent(url)}&format=${format}`
       window.location.href = downloadUrl
-    } catch {
+
+      // 延迟重置下载状态，给用户足够的反馈时间
+      setTimeout(() => {
+        setDownloading(false)
+      }, 3000)
+
+    } catch (error) {
+      setDownloading(false)
       setError(`${t.errors.downloadFailed}，${t.errors.networkError}`)
     }
   }
@@ -254,7 +275,7 @@ export default function Home() {
             
             <button
               type="submit"
-              disabled={loading || !url.trim() || !isValidVideoUrl(url)}
+              disabled={loading || downloading || !url.trim() || !isValidVideoUrl(url)}
               className="w-full sm:w-auto px-8 py-4 bg-blue-600 hover:bg-blue-700 disabled:bg-gray-300 disabled:cursor-not-allowed text-white font-semibold rounded-xl transition-all duration-200 transform hover:scale-[1.02] active:scale-[0.98] shadow-sm"
             >
               {loading ? (
@@ -262,12 +283,34 @@ export default function Home() {
                   <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
                   <span>{t.processingButton}</span>
                 </span>
+              ) : downloading ? (
+                <span className="flex items-center justify-center space-x-2">
+                  <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                  <span>正在准备下载...</span>
+                </span>
               ) : (
                 t.getInfoButton
               )}
             </button>
           </form>
         </div>
+
+        {/* Download Status Message */}
+        {downloading && (
+          <div className="bg-blue-50 border border-blue-200 rounded-xl p-6 mb-8">
+            <div className="flex items-center space-x-4">
+              <div className="flex-shrink-0">
+                <div className="w-8 h-8 border-4 border-blue-500 border-t-transparent rounded-full animate-spin"></div>
+              </div>
+              <div className="flex-1">
+                <h4 className="text-blue-800 font-semibold text-lg mb-2">正在准备下载</h4>
+                <p className="text-blue-700 leading-relaxed">
+                  下载即将开始，请稍候...如果浏览器没有自动开始下载，请检查弹窗拦截设置。
+                </p>
+              </div>
+            </div>
+          </div>
+        )}
 
         {/* Error Message */}
         {error && (
@@ -353,12 +396,22 @@ export default function Home() {
                   <div className="pt-2">
                     <button
                       onClick={() => handleDownload('video')}
-                      className="w-full sm:w-auto flex items-center justify-center space-x-2 px-8 py-4 bg-green-600 hover:bg-green-700 text-white font-semibold rounded-xl transition-all duration-200 transform hover:scale-[1.02] active:scale-[0.98] shadow-sm"
+                      disabled={downloading || loading}
+                      className="w-full sm:w-auto flex items-center justify-center space-x-2 px-8 py-4 bg-green-600 hover:bg-green-700 disabled:bg-gray-400 disabled:cursor-not-allowed text-white font-semibold rounded-xl transition-all duration-200 transform hover:scale-[1.02] active:scale-[0.98] shadow-sm"
                     >
-                      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
-                      </svg>
-                      <span>{t.downloadVideo}</span>
+                      {downloading ? (
+                        <>
+                          <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                          <span>正在下载...</span>
+                        </>
+                      ) : (
+                        <>
+                          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
+                          </svg>
+                          <span>{t.downloadVideo}</span>
+                        </>
+                      )}
                     </button>
                   </div>
                 </div>
