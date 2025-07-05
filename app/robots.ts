@@ -1,7 +1,7 @@
 import { MetadataRoute } from 'next'
 
 export default function robots(): MetadataRoute.Robots {
-  const baseUrl = 'https://your-domain.com'
+  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://douyin-downloader.vercel.app'
   
   return {
     rules: {

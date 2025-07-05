@@ -178,7 +178,7 @@ export class HybridApiParser extends BaseParser {
       author: (author?.nickname as string) || (author?.unique_id as string) || 'Unknown Author',
       authorId: (author?.unique_id as string) || (author?.sec_uid as string) || '',
       thumbnail: thumbnail,
-      duration: (video?.duration as number) ? Math.round((video.duration as number) / 1000) : 0,
+      duration: (video?.duration as number) ? Math.round((video?.duration as number) / 1000) : 0,
       videoUrl: videoUrl,
       audioUrl: audioUrl,
       stats: {

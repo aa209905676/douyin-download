@@ -387,24 +387,8 @@ export class DouyinDirectApiParser extends BaseParser {
         comments: statistics.comment_count || 0,
         shares: statistics.share_count || 0,
         views: statistics.play_count || 0,
-        // 额外的统计信息
-        collects: statistics.collect_count || 0,
-        forwards: statistics.forward_count || 0,
       },
       createdAt: awemeData.create_time ? new Date(awemeData.create_time * 1000) : new Date(),
-      // 额外的元数据
-      metadata: {
-        videoId: awemeData.aweme_id,
-        isAd: awemeData.is_ad || false,
-        region: awemeData.region || '',
-        shareUrl: awemeData.share_url || '',
-        musicInfo: music.title ? {
-          id: music.id,
-          title: music.title,
-          author: music.author,
-          coverUrl: music.cover_thumb?.url_list?.[0] || ''
-        } : undefined
-      }
     }
   }
 

@@ -3,12 +3,14 @@
 import Head from 'next/head'
 
 export default function SEOHead() {
+  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://douyin-downloader.vercel.app'
+
   const structuredData = {
     "@context": "https://schema.org",
     "@type": "WebApplication",
     "name": "抖音视频无水印下载器",
     "description": "免费在线抖音视频下载器，支持无水印下载抖音、TikTok视频。快速、安全、无需安装软件。",
-    "url": "https://your-domain.com",
+    "url": baseUrl,
     "applicationCategory": "MultimediaApplication",
     "operatingSystem": "Web Browser",
     "offers": {
@@ -24,7 +26,7 @@ export default function SEOHead() {
       "无需安装软件",
       "支持批量下载"
     ],
-    "screenshot": "https://your-domain.com/screenshot.jpg",
+    "screenshot": `${baseUrl}/screenshot.jpg`,
     "softwareVersion": "1.0",
     "datePublished": "2024-01-01",
     "dateModified": new Date().toISOString().split('T')[0],

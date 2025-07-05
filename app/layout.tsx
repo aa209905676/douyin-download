@@ -24,10 +24,10 @@ export const metadata: Metadata = {
     description: "免费在线下载抖音TikTok视频，支持无水印高清下载",
   },
   alternates: {
-    canonical: "https://your-domain.com",
+    canonical: process.env.NEXT_PUBLIC_SITE_URL || "https://douyin-downloader.vercel.app",
     languages: {
-      "zh-CN": "https://your-domain.com",
-      "en": "https://your-domain.com/en",
+      "zh-CN": process.env.NEXT_PUBLIC_SITE_URL || "https://douyin-downloader.vercel.app",
+      "en": (process.env.NEXT_PUBLIC_SITE_URL || "https://douyin-downloader.vercel.app") + "/en",
     },
   },
 };

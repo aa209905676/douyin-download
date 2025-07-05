@@ -43,7 +43,7 @@ function errorResponse(message: string, status = 500, error?: any) {
 }
 
 // 下载处理函数
-async function handleDownload(url: string, format: string, quality: string, watermark: boolean) {
+async function handleDownload(url: string, format: 'video' | 'audio', quality: 'high' | 'medium' | 'low', watermark: boolean) {
   try {
     const extractedUrl = extractUrl(url)
 
@@ -130,8 +130,8 @@ export async function GET(request: NextRequest) {
     return errorResponse('URL parameter is required', 400)
   }
 
-  const format = searchParams.get('format') || 'video'
-  const quality = searchParams.get('quality') || 'high'
+  const format = (searchParams.get('format') || 'video') as 'video' | 'audio'
+  const quality = (searchParams.get('quality') || 'high') as 'high' | 'medium' | 'low'
   const watermark = searchParams.get('watermark') === 'true'
 
   return handleDownload(url, format, quality, watermark)
@@ -147,7 +147,7 @@ export async function POST(request: NextRequest) {
       return errorResponse('URL is required', 400)
     }
 
-    return handleDownload(url, format, quality, watermark)
+    return handleDownload(url, format as 'video' | 'audio', quality as 'high' | 'medium' | 'low', watermark)
 
   } catch (error) {
     console.error('POST error:', error)
