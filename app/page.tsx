@@ -107,25 +107,7 @@ export default function Home() {
     }
   }
 
-  // 新增：直接下载功能（不需要先获取视频信息）
-  const handleDirectDownload = async (format: 'video' | 'audio') => {
-    if (!url.trim()) {
-      setError(t.errors.invalidUrl)
-      return
-    }
 
-    try {
-      // 直接跳转到下载API，触发浏览器下载对话框
-      const downloadUrl = `/api/video/download?url=${encodeURIComponent(url)}&format=${format}`
-      window.location.href = downloadUrl
-
-      // 显示下载提示
-      setError('')
-      // 可以添加一个成功提示，但由于页面会跳转，用户可能看不到
-    } catch {
-      setError(`${t.errors.downloadFailed}，${t.errors.networkError}`)
-    }
-  }
 
   if (!mounted) {
     return null
@@ -183,49 +165,20 @@ export default function Home() {
               />
             </div>
             
-            <div className="flex flex-col sm:flex-row gap-4">
-              <button
-                type="submit"
-                disabled={loading || !url.trim()}
-                className="flex-1 sm:flex-none px-8 py-4 bg-blue-600 hover:bg-blue-700 disabled:bg-gray-300 disabled:cursor-not-allowed text-white font-semibold rounded-xl transition-all duration-200 transform hover:scale-[1.02] active:scale-[0.98] shadow-sm"
-              >
-                {loading ? (
-                  <span className="flex items-center justify-center space-x-2">
-                    <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
-                    <span>{t.processingButton}</span>
-                  </span>
-                ) : (
-                  t.getInfoButton
-                )}
-              </button>
-
-              {/* 直接下载按钮 */}
-              <div className="flex gap-3">
-                <button
-                  type="button"
-                  onClick={() => handleDirectDownload('video')}
-                  disabled={!url.trim()}
-                  className="flex items-center justify-center space-x-2 px-6 py-4 bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 disabled:bg-gray-300 disabled:cursor-not-allowed text-white font-semibold rounded-xl transition-all duration-200 transform hover:scale-[1.02] active:scale-[0.98] shadow-sm"
-                >
-                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z" />
-                  </svg>
-                  <span>📹 直接下载视频</span>
-                </button>
-
-                <button
-                  type="button"
-                  onClick={() => handleDirectDownload('audio')}
-                  disabled={!url.trim()}
-                  className="flex items-center justify-center space-x-2 px-6 py-4 bg-gradient-to-r from-purple-500 to-purple-600 hover:from-purple-600 hover:to-purple-700 disabled:bg-gray-300 disabled:cursor-not-allowed text-white font-semibold rounded-xl transition-all duration-200 transform hover:scale-[1.02] active:scale-[0.98] shadow-sm"
-                >
-                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19V6l12-3v13M9 19c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zm12-3c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zM9 10l12-3" />
-                  </svg>
-                  <span>🎵 直接下载音频</span>
-                </button>
-              </div>
-            </div>
+            <button
+              type="submit"
+              disabled={loading || !url.trim()}
+              className="w-full sm:w-auto px-8 py-4 bg-blue-600 hover:bg-blue-700 disabled:bg-gray-300 disabled:cursor-not-allowed text-white font-semibold rounded-xl transition-all duration-200 transform hover:scale-[1.02] active:scale-[0.98] shadow-sm"
+            >
+              {loading ? (
+                <span className="flex items-center justify-center space-x-2">
+                  <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                  <span>{t.processingButton}</span>
+                </span>
+              ) : (
+                t.getInfoButton
+              )}
+            </button>
           </form>
         </div>
 
@@ -309,25 +262,16 @@ export default function Home() {
                     ))}
                   </div>
                   
-                  {/* Download Buttons */}
-                  <div className="flex flex-col sm:flex-row gap-3 pt-2">
+                  {/* Download Button */}
+                  <div className="pt-2">
                     <button
                       onClick={() => handleDownload('video')}
-                      className="flex-1 flex items-center justify-center space-x-2 px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-xl transition-all duration-200 transform hover:scale-[1.02] active:scale-[0.98]"
+                      className="w-full sm:w-auto flex items-center justify-center space-x-2 px-8 py-4 bg-green-600 hover:bg-green-700 text-white font-semibold rounded-xl transition-all duration-200 transform hover:scale-[1.02] active:scale-[0.98] shadow-sm"
                     >
                       <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
                       </svg>
                       <span>{t.downloadVideo}</span>
-                    </button>
-                    <button
-                      onClick={() => handleDownload('audio')}
-                      className="flex-1 flex items-center justify-center space-x-2 px-6 py-3 bg-gray-600 hover:bg-gray-700 text-white font-medium rounded-xl transition-all duration-200 transform hover:scale-[1.02] active:scale-[0.98]"
-                    >
-                      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19V6l12-3v13M9 19c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zm12-3c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zM9 10l12-3" />
-                      </svg>
-                      <span>{t.downloadAudio}</span>
                     </button>
                   </div>
                 </div>

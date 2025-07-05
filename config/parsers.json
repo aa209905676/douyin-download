@@ -6,13 +6,12 @@
       "retries": 2,
       "parsers": [
         {
-          "type": "hybrid-api",
-          "name": "HybridAPI",
+          "type": "douyin-direct-api",
+          "name": "DouyinDirectAPI",
           "priority": 1,
           "enabled": true,
           "config": {
-            "baseUrl": "https://api.douyin.wtf",
-            "timeout": 10000
+            "timeout": 15000
           }
         },
         {
@@ -22,6 +21,16 @@
           "enabled": true,
           "config": {
             "baseUrl": "http://127.0.0.1:6666",
+            "timeout": 10000
+          }
+        },
+        {
+          "type": "hybrid-api",
+          "name": "HybridAPI",
+          "priority": 3,
+          "enabled": true,
+          "config": {
+            "baseUrl": "https://api.douyin.wtf",
             "timeout": 10000
           }
         }
