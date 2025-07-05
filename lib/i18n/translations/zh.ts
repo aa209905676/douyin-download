@@ -73,7 +73,11 @@ export const zh: Translation = {
     invalidUrl: '请输入有效的 TikTok 或抖音视频链接。支持的格式包括：分享链接、短链接和完整链接。',
     timeout: '请求超时，服务器响应较慢。请稍后重试。',
     badRequest: '视频链接格式有误或该视频无法解析。请检查链接是否正确。',
-    defaultError: '服务暂时不可用。我们正在努力解决问题，请稍后重试。'
+    defaultError: '服务暂时不可用。我们正在努力解决问题，请稍后重试。',
+    
+    // DouyinDirectAPI 特定错误
+    videoNotFound: '视频不存在或已被删除。请检查链接是否正确。',
+    douyinApiError: '抖音官方API访问失败。可能是由于访问限制或服务器维护。'
   },
   
   // Language Switcher

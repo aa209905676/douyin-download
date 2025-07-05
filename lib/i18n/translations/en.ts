@@ -73,7 +73,11 @@ export const en: Translation = {
     invalidUrl: 'Please enter a valid TikTok or Douyin video link. Supported formats include: share links, short links and full links.',
     timeout: 'Request timeout, server response is slow. Please try again later.',
     badRequest: 'Video link format is incorrect or the video cannot be parsed. Please check if the link is correct.',
-    defaultError: 'Service temporarily unavailable. We are working hard to solve the problem, please try again later.'
+    defaultError: 'Service temporarily unavailable. We are working hard to solve the problem, please try again later.',
+    
+    // DouyinDirectAPI specific errors
+    videoNotFound: 'Video not found or has been deleted. Please check if the link is correct.',
+    douyinApiError: 'Failed to access Douyin official API. This may be due to access restrictions or server maintenance.'
   },
   
   // Language Switcher

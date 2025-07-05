@@ -74,6 +74,10 @@ export interface Translation {
     timeout: string
     badRequest: string
     defaultError: string
+    
+    // DouyinDirectAPI specific errors
+    videoNotFound: string
+    douyinApiError: string
   }
   
   // Language Switcher

@@ -45,9 +45,9 @@ tiktok-downloader/
 ```
 解析策略
 ├── API解析 (默认, 优先级1)
-│   ├── HybridAPI (优先级1.1, 重试2次)
-│   ├── RapidAPI (优先级1.2, 重试2次)
-│   └── OtherAPI (优先级1.3, 重试2次)
+│   ├── HybridAPI (优先级1, 重试2次) - api.douyin.wtf
+│   ├── LocalAPI (优先级2, 重试2次) - 127.0.0.1:6666
+│   └── DouyinDirectAPI (优先级3, 重试2次) - 抖音官方API
 ├── Python库解析 (优先级2)
 │   └── PythonScraper (重试1次)
 └── 其他解析方式 (优先级3)
@@ -175,6 +175,17 @@ Response: { url: string, filename: string, size?: number, mimeType: string }
 - **参数**: `url` (视频链接), `minimal` (可选)
 - **特点**: 本地API服务，作为备用解析器
 - **优先级**: 2
+
+### DouyinDirectAPI (最终备用)
+- **端点**: `https://www.iesdouyin.com/web/api/v2/aweme/iteminfo/`
+- **参数**: `item_ids` (视频ID)
+- **特点**: 直接调用抖音官方API，仅支持抖音视频
+- **优先级**: 3
+- **功能**: 
+  - 短链接重定向跟随
+  - 多种模式视频ID提取
+  - PC/移动端用户代理切换
+  - 抖音官方数据格式解析
 
 ## 前端功能
 1. 单链接下载

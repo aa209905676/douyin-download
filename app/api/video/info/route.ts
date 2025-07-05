@@ -1,6 +1,23 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { parserManager } from '@/lib/parsers/registry'
 
+// 添加CORS头部
+function corsHeaders() {
+  return {
+    'Access-Control-Allow-Origin': '*',
+    'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
+    'Access-Control-Allow-Headers': 'Content-Type, Authorization',
+  }
+}
+
+// 处理OPTIONS预检请求
+export async function OPTIONS(request: NextRequest) {
+  return new NextResponse(null, {
+    status: 200,
+    headers: corsHeaders(),
+  })
+}
+
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json()
@@ -9,7 +26,10 @@ export async function POST(request: NextRequest) {
     if (!url || typeof url !== 'string') {
       return NextResponse.json(
         { error: 'URL is required' },
-        { status: 400 }
+        {
+          status: 400,
+          headers: corsHeaders()
+        }
       )
     }
     
@@ -43,14 +63,19 @@ export async function POST(request: NextRequest) {
     } catch {
       return NextResponse.json(
         { error: 'Invalid URL format' },
-        { status: 400 }
+        {
+          status: 400,
+          headers: corsHeaders()
+        }
       )
     }
     
     // Get video info using parser manager
     const info = await parserManager.getInfo(extractedUrl)
-    
-    return NextResponse.json(info)
+
+    return NextResponse.json(info, {
+      headers: corsHeaders()
+    })
     
   } catch (error) {
     console.error('Error getting video info:', error)
@@ -59,12 +84,15 @@ export async function POST(request: NextRequest) {
     const code = (error as { code?: string })?.code || 'UNKNOWN_ERROR'
     
     return NextResponse.json(
-      { 
+      {
         error: message,
         code,
         details: process.env.NODE_ENV === 'development' ? error : undefined
       },
-      { status: 500 }
+      {
+        status: 500,
+        headers: corsHeaders()
+      }
     )
   }
 }

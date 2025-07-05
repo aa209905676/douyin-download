@@ -114,23 +114,78 @@ export class HybridApiParser extends BaseParser {
     const statistics = data.statistics as Record<string, unknown> | undefined
     const stats = data.stats as Record<string, unknown> | undefined
     const music = data.music as Record<string, unknown> | undefined
-    const cover = data.cover as string[] | undefined
-    const dynamicCover = data.dynamic_cover as string[] | undefined
-    const play = data.play as string[] | undefined
-    
+    const video = data.video as Record<string, unknown> | undefined
+
+    // 提取视频URL - 优先从video.play_addr获取
+    let videoUrl = ''
+    if (video?.play_addr) {
+      const playAddr = video.play_addr as Record<string, unknown>
+      const urlList = playAddr.url_list as string[]
+      if (urlList && urlList.length > 0) {
+        videoUrl = urlList[0]
+      }
+    }
+    // 备选方案：从video.download_addr获取
+    if (!videoUrl && video?.download_addr) {
+      const downloadAddr = video.download_addr as Record<string, unknown>
+      const urlList = downloadAddr.url_list as string[]
+      if (urlList && urlList.length > 0) {
+        videoUrl = urlList[0]
+      }
+    }
+    // 最后备选：从bit_rate获取最高质量
+    if (!videoUrl && video?.bit_rate) {
+      const bitRates = video.bit_rate as Array<Record<string, unknown>>
+      if (bitRates && bitRates.length > 0) {
+        const highestQuality = bitRates[0]
+        const playAddr = highestQuality.play_addr as Record<string, unknown>
+        const urlList = playAddr?.url_list as string[]
+        if (urlList && urlList.length > 0) {
+          videoUrl = urlList[0]
+        }
+      }
+    }
+
+    // 提取音频URL
+    let audioUrl = ''
+    if (music?.play_url) {
+      const playUrl = music.play_url as Record<string, unknown>
+      const urlList = playUrl.url_list as string[]
+      if (urlList && urlList.length > 0) {
+        audioUrl = urlList[0]
+      }
+    }
+
+    // 提取缩略图
+    let thumbnail = ''
+    if (video?.dynamic_cover) {
+      const dynamicCover = video.dynamic_cover as Record<string, unknown>
+      const urlList = dynamicCover.url_list as string[]
+      if (urlList && urlList.length > 0) {
+        thumbnail = urlList[0]
+      }
+    }
+    if (!thumbnail && video?.origin_cover) {
+      const originCover = video.origin_cover as Record<string, unknown>
+      const urlList = originCover.url_list as string[]
+      if (urlList && urlList.length > 0) {
+        thumbnail = urlList[0]
+      }
+    }
+
     return {
-      title: (data.title as string) || (data.desc as string) || 'Unknown Title',
+      title: (data.desc as string) || (data.title as string) || 'Unknown Title',
       author: (author?.nickname as string) || (author?.unique_id as string) || 'Unknown Author',
       authorId: (author?.unique_id as string) || (author?.sec_uid as string) || '',
-      thumbnail: cover?.[0] || dynamicCover?.[0] || '',
-      duration: (data.duration as number) || 0,
-      videoUrl: play?.[0] || (data.video_url as string) || '',
-      audioUrl: (music?.play_url as string) || (data.audio_url as string) || '',
+      thumbnail: thumbnail,
+      duration: (video?.duration as number) ? Math.round((video.duration as number) / 1000) : 0,
+      videoUrl: videoUrl,
+      audioUrl: audioUrl,
       stats: {
-        likes: (statistics?.digg_count as number) || (stats?.like_count as number) || 0,
-        comments: (statistics?.comment_count as number) || (stats?.comment_count as number) || 0,
-        shares: (statistics?.share_count as number) || (stats?.share_count as number) || 0,
-        views: (statistics?.play_count as number) || (stats?.view_count as number) || 0
+        likes: (statistics?.digg_count as number) || 0,
+        comments: (statistics?.comment_count as number) || 0,
+        shares: (statistics?.share_count as number) || 0,
+        views: (statistics?.play_count as number) || 0
       },
       createdAt: data.create_time ? new Date((data.create_time as number) * 1000) : new Date()
     }
