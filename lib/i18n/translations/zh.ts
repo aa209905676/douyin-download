@@ -2,16 +2,16 @@ import { Translation } from '../types'
 
 export const zh: Translation = {
   // Header
-  appTitle: 'TikTok Downloader',
-  appSubtitle: '免费快速',
-  
+  appTitle: '抖音视频无水印下载器',
+  appSubtitle: '免费在线下载',
+
   // Hero Section
-  heroTitle: '下载 TikTok 视频',
-  heroSubtitle: '无水印下载',
-  heroDescription: '粘贴任意 TikTok 或抖音视频链接，几秒钟内下载。高质量、无水印、完全免费。',
+  heroTitle: '抖音视频无水印下载器',
+  heroSubtitle: '免费在线下载抖音TikTok视频',
+  heroDescription: '专业的抖音视频下载工具，支持无水印下载抖音、TikTok视频。粘贴视频链接，一键下载高清视频到本地，完全免费使用。',
   
   // Input Section
-  inputPlaceholder: '请粘贴 TikTok 或抖音视频链接...',
+  inputPlaceholder: '粘贴抖音或TikTok视频链接，支持无水印下载...',
   getInfoButton: '获取视频信息',
   processingButton: '正在解析视频...',
   

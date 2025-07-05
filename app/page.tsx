@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react'
 import { useLanguage } from '../lib/hooks/useLanguage'
 import SimpleLanguageSwitcher from './components/SimpleLanguageSwitcher'
+import SEOHead from './components/SEOHead'
 
 interface VideoInfo {
   title: string
@@ -77,13 +78,8 @@ export default function Home() {
   const [loading, setLoading] = useState(false)
   const [videoInfo, setVideoInfo] = useState<VideoInfo | null>(null)
   const [error, setError] = useState('')
-  const [mounted, setMounted] = useState(false)
   const [urlError, setUrlError] = useState('')
   const [downloading, setDownloading] = useState(false)
-
-  useEffect(() => {
-    setMounted(true)
-  }, [])
 
   // 处理URL输入变化
   const handleUrlChange = (value: string) => {
@@ -176,12 +172,11 @@ export default function Home() {
 
 
 
-  if (!mounted) {
-    return null
-  }
+
 
   return (
     <div className="min-h-screen bg-gray-50">
+      <SEOHead />
       {/* Header */}
       <header className="bg-white/80 backdrop-blur-xl border-b border-gray-200/50 sticky top-0 z-50">
         <div className="max-w-4xl mx-auto px-6 py-4">
@@ -460,8 +455,78 @@ export default function Home() {
         </div>
       </main>
 
+      {/* SEO Content Section */}
+      <section className="bg-white border-t border-gray-200 mt-16">
+        <div className="max-w-4xl mx-auto px-6 py-12">
+          <div className="grid md:grid-cols-2 gap-8">
+            <div>
+              <h2 className="text-2xl font-bold text-gray-900 mb-4">抖音视频无水印下载器</h2>
+              <p className="text-gray-600 mb-4">
+                我们提供最专业的<strong>抖音视频下载</strong>服务，支持<strong>无水印下载</strong>抖音和TikTok视频。
+                无需安装任何软件，在线即可快速下载高清视频到本地设备。
+              </p>
+              <ul className="text-gray-600 space-y-2">
+                <li>✅ <strong>抖音无水印下载</strong> - 去除视频水印，保持原始画质</li>
+                <li>✅ <strong>TikTok视频下载</strong> - 支持国际版TikTok视频下载</li>
+                <li>✅ <strong>高清视频质量</strong> - 保持原始分辨率和画质</li>
+                <li>✅ <strong>免费在线使用</strong> - 无需注册，完全免费</li>
+              </ul>
+            </div>
+            <div>
+              <h3 className="text-xl font-bold text-gray-900 mb-4">如何下载抖音视频？</h3>
+              <div className="space-y-4">
+                <div className="flex items-start space-x-3">
+                  <div className="w-6 h-6 bg-blue-500 text-white rounded-full flex items-center justify-center text-sm font-bold">1</div>
+                  <div>
+                    <h4 className="font-semibold text-gray-900">复制视频链接</h4>
+                    <p className="text-gray-600 text-sm">在抖音或TikTok应用中复制要下载的视频链接</p>
+                  </div>
+                </div>
+                <div className="flex items-start space-x-3">
+                  <div className="w-6 h-6 bg-blue-500 text-white rounded-full flex items-center justify-center text-sm font-bold">2</div>
+                  <div>
+                    <h4 className="font-semibold text-gray-900">粘贴到下载器</h4>
+                    <p className="text-gray-600 text-sm">将链接粘贴到上方的输入框中</p>
+                  </div>
+                </div>
+                <div className="flex items-start space-x-3">
+                  <div className="w-6 h-6 bg-blue-500 text-white rounded-full flex items-center justify-center text-sm font-bold">3</div>
+                  <div>
+                    <h4 className="font-semibold text-gray-900">一键下载</h4>
+                    <p className="text-gray-600 text-sm">点击下载按钮，即可获得无水印高清视频</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* FAQ Section */}
+          <div className="mt-12 pt-8 border-t border-gray-200">
+            <h3 className="text-xl font-bold text-gray-900 mb-6 text-center">常见问题</h3>
+            <div className="grid md:grid-cols-2 gap-6">
+              <div>
+                <h4 className="font-semibold text-gray-900 mb-2">下载的视频有水印吗？</h4>
+                <p className="text-gray-600 text-sm">我们的下载器支持无水印下载，下载的视频不包含抖音水印，保持原始高清画质。</p>
+              </div>
+              <div>
+                <h4 className="font-semibold text-gray-900 mb-2">是否需要安装软件？</h4>
+                <p className="text-gray-600 text-sm">不需要安装任何软件，我们提供在线下载服务，直接在浏览器中使用即可。</p>
+              </div>
+              <div>
+                <h4 className="font-semibold text-gray-900 mb-2">支持哪些平台？</h4>
+                <p className="text-gray-600 text-sm">支持抖音(Douyin)和TikTok平台的视频下载，兼容各种链接格式。</p>
+              </div>
+              <div>
+                <h4 className="font-semibold text-gray-900 mb-2">下载速度如何？</h4>
+                <p className="text-gray-600 text-sm">我们提供高速下载服务，通常几秒钟即可完成视频下载。</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* Footer */}
-      <footer className="border-t border-gray-200 bg-white/80 backdrop-blur-xl">
+      <footer className="border-t border-gray-200 bg-gray-100">
         <div className="max-w-4xl mx-auto px-6 py-8">
           <div className="text-center text-gray-500">
             <p className="text-sm">
