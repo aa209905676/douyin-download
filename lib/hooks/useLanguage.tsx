@@ -51,7 +51,7 @@ export function LanguageProvider({ children }: LanguageProviderProps) {
 
   if (!mounted) {
     // 避免 SSR/CSR 不匹配
-    return null
+    return <div suppressHydrationWarning />
   }
 
   return (
