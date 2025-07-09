@@ -39,6 +39,14 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="zh-CN">
+      <head>
+        {/* Google AdSense */}
+        <script
+          async
+          src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8752416319460616"
+          crossOrigin="anonymous"
+        />
+      </head>
       <body className="antialiased font-sans">
         <LanguageProvider>
           {children}

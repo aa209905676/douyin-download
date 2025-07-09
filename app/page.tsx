@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react'
 import { useLanguage } from '../lib/hooks/useLanguage'
 import SimpleLanguageSwitcher from './components/SimpleLanguageSwitcher'
 import SEOHead from './components/SEOHead'
+import { HeaderAd, ContentAd, FooterAd } from './components/GoogleAdsense'
 
 interface VideoInfo {
   title: string
@@ -213,6 +214,9 @@ export default function Home() {
           </p>
         </div>
 
+        {/* Header Advertisement */}
+        <HeaderAd />
+
         {/* Input Section */}
         <div className="bg-white rounded-2xl shadow-sm border border-gray-200/50 p-8 mb-8">
           <form onSubmit={handleSubmit} className="space-y-6">
@@ -415,6 +419,9 @@ export default function Home() {
           </div>
         )}
 
+        {/* Content Advertisement */}
+        <ContentAd />
+
         {/* Features */}
         <div className="grid md:grid-cols-3 gap-6 mb-16">
           {[
@@ -524,6 +531,11 @@ export default function Home() {
           </div>
         </div>
       </section>
+
+      {/* Footer Advertisement */}
+      <div className="max-w-4xl mx-auto px-6">
+        <FooterAd />
+      </div>
 
       {/* Footer */}
       <footer className="border-t border-gray-200 bg-gray-100">
