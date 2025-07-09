@@ -37,6 +37,10 @@ export default function GoogleAdsense({
 
   return (
     <div className={`adsense-container ${className}`}>
+      {/* 调试信息 - 生产环境中可以移除 */}
+      <div className="text-xs text-gray-400 text-center mb-2">
+        广告位 (AdSlot: {adSlot}) - 等待审核通过后显示
+      </div>
       <ins
         className="adsbygoogle"
         style={style}
