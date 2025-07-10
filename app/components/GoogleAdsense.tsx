@@ -37,9 +37,9 @@ export default function GoogleAdsense({
 
   return (
     <div className={`adsense-container ${className}`}>
-      {/* 调试信息 - 生产环境中可以移除 */}
+      {/* 广告标识 - 符合AdSense政策要求 */}
       <div className="text-xs text-gray-400 text-center mb-2">
-        广告位 (AdSlot: {adSlot}) - 等待审核通过后显示
+        广告
       </div>
       <ins
         className="adsbygoogle"
@@ -55,47 +55,29 @@ export default function GoogleAdsense({
   )
 }
 
-// 预定义的广告位组件
-export function HeaderAd() {
-  return (
-    <GoogleAdsense
-      adSlot="1234567890"
-      adFormat="horizontal"
-      className="mb-6"
-      style={{ display: 'block', textAlign: 'center', minHeight: '90px' }}
-    />
-  )
-}
-
-export function SidebarAd() {
-  return (
-    <GoogleAdsense
-      adSlot="2345678901"
-      adFormat="vertical"
-      className="sticky top-24"
-      style={{ display: 'block', width: '300px', minHeight: '250px' }}
-    />
-  )
-}
-
+// 预定义的广告位组件 - 减少广告数量，符合AdSense政策
 export function ContentAd() {
   return (
-    <GoogleAdsense
-      adSlot="3456789012"
-      adFormat="rectangle"
-      className="my-8"
-      style={{ display: 'block', textAlign: 'center', minHeight: '250px' }}
-    />
+    <div className="my-12">
+      <GoogleAdsense
+        adSlot="3456789012"
+        adFormat="rectangle"
+        className="my-8"
+        style={{ display: 'block', textAlign: 'center', minHeight: '250px' }}
+      />
+    </div>
   )
 }
 
 export function FooterAd() {
   return (
-    <GoogleAdsense
-      adSlot="4567890123"
-      adFormat="horizontal"
-      className="mt-8"
-      style={{ display: 'block', textAlign: 'center', minHeight: '90px' }}
-    />
+    <div className="mt-16">
+      <GoogleAdsense
+        adSlot="4567890123"
+        adFormat="horizontal"
+        className="mt-8"
+        style={{ display: 'block', textAlign: 'center', minHeight: '90px' }}
+      />
+    </div>
   )
 }

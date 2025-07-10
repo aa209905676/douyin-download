@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react'
 import { useLanguage } from '../lib/hooks/useLanguage'
 import SimpleLanguageSwitcher from './components/SimpleLanguageSwitcher'
 import SEOHead from './components/SEOHead'
-import { HeaderAd, ContentAd, FooterAd } from './components/GoogleAdsense'
+import { ContentAd, FooterAd } from './components/GoogleAdsense'
 
 interface VideoInfo {
   title: string
@@ -214,8 +214,27 @@ export default function Home() {
           </p>
         </div>
 
-        {/* Header Advertisement */}
-        <HeaderAd />
+        {/* 使用指南 */}
+        <div className="bg-gradient-to-r from-blue-50 to-purple-50 rounded-2xl p-8 mb-8 border border-blue-100">
+          <h3 className="text-2xl font-bold text-gray-900 mb-6 text-center">使用指南</h3>
+          <div className="grid md:grid-cols-3 gap-6">
+            <div className="text-center">
+              <div className="w-16 h-16 bg-blue-500 text-white rounded-full flex items-center justify-center text-2xl font-bold mx-auto mb-4">1</div>
+              <h4 className="font-semibold text-gray-900 mb-2">复制链接</h4>
+              <p className="text-gray-600 text-sm">在抖音或TikTok中找到想要下载的视频，点击分享按钮复制链接</p>
+            </div>
+            <div className="text-center">
+              <div className="w-16 h-16 bg-purple-500 text-white rounded-full flex items-center justify-center text-2xl font-bold mx-auto mb-4">2</div>
+              <h4 className="font-semibold text-gray-900 mb-2">粘贴解析</h4>
+              <p className="text-gray-600 text-sm">将链接粘贴到下方输入框，点击获取视频信息按钮</p>
+            </div>
+            <div className="text-center">
+              <div className="w-16 h-16 bg-green-500 text-white rounded-full flex items-center justify-center text-2xl font-bold mx-auto mb-4">3</div>
+              <h4 className="font-semibold text-gray-900 mb-2">下载保存</h4>
+              <p className="text-gray-600 text-sm">点击下载按钮，无水印高清视频将自动保存到您的设备</p>
+            </div>
+          </div>
+        </div>
 
         {/* Input Section */}
         <div className="bg-white rounded-2xl shadow-sm border border-gray-200/50 p-8 mb-8">
@@ -419,9 +438,6 @@ export default function Home() {
           </div>
         )}
 
-        {/* Content Advertisement */}
-        <ContentAd />
-
         {/* Features */}
         <div className="grid md:grid-cols-3 gap-6 mb-16">
           {[
@@ -449,6 +465,9 @@ export default function Home() {
           ))}
         </div>
 
+        {/* Content Advertisement - 放在内容中间位置 */}
+        <ContentAd />
+
         {/* Supported Formats */}
         <div className="text-center mb-16">
           <h3 className="text-2xl font-semibold text-gray-900 mb-6">{t.supportedPlatforms}</h3>
@@ -458,6 +477,49 @@ export default function Home() {
                 {platform}
               </span>
             ))}
+          </div>
+        </div>
+
+        {/* 技术特色 */}
+        <div className="bg-white rounded-2xl shadow-sm border border-gray-200/50 p-8 mb-16">
+          <h3 className="text-2xl font-bold text-gray-900 mb-8 text-center">技术优势</h3>
+          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+            <div className="text-center">
+              <div className="w-12 h-12 bg-blue-100 text-blue-600 rounded-lg flex items-center justify-center mx-auto mb-4">
+                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
+                </svg>
+              </div>
+              <h4 className="font-semibold text-gray-900 mb-2">极速解析</h4>
+              <p className="text-gray-600 text-sm">采用多重API并发解析，确保最快的响应速度</p>
+            </div>
+            <div className="text-center">
+              <div className="w-12 h-12 bg-green-100 text-green-600 rounded-lg flex items-center justify-center mx-auto mb-4">
+                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+              </div>
+              <h4 className="font-semibold text-gray-900 mb-2">高成功率</h4>
+              <p className="text-gray-600 text-sm">智能容错机制，多种解析策略确保下载成功</p>
+            </div>
+            <div className="text-center">
+              <div className="w-12 h-12 bg-purple-100 text-purple-600 rounded-lg flex items-center justify-center mx-auto mb-4">
+                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+                </svg>
+              </div>
+              <h4 className="font-semibold text-gray-900 mb-2">原画质量</h4>
+              <p className="text-gray-600 text-sm">保持视频原始分辨率和画质，无损下载</p>
+            </div>
+            <div className="text-center">
+              <div className="w-12 h-12 bg-red-100 text-red-600 rounded-lg flex items-center justify-center mx-auto mb-4">
+                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                </svg>
+              </div>
+              <h4 className="font-semibold text-gray-900 mb-2">隐私安全</h4>
+              <p className="text-gray-600 text-sm">不存储用户数据，所有处理均在本地完成</p>
+            </div>
           </div>
         </div>
       </main>
@@ -526,6 +588,57 @@ export default function Home() {
               <div>
                 <h4 className="font-semibold text-gray-900 mb-2">下载速度如何？</h4>
                 <p className="text-gray-600 text-sm">我们提供高速下载服务，通常几秒钟即可完成视频下载。</p>
+              </div>
+              <div>
+                <h4 className="font-semibold text-gray-900 mb-2">支持哪些视频格式？</h4>
+                <p className="text-gray-600 text-sm">支持MP4格式下载，兼容所有主流设备和播放器，确保最佳兼容性。</p>
+              </div>
+              <div>
+                <h4 className="font-semibold text-gray-900 mb-2">有下载次数限制吗？</h4>
+                <p className="text-gray-600 text-sm">完全免费使用，无下载次数限制，随时随地下载您喜欢的视频内容。</p>
+              </div>
+            </div>
+          </div>
+
+          {/* 使用技巧 */}
+          <div className="mt-12 pt-8 border-t border-gray-200">
+            <h3 className="text-xl font-bold text-gray-900 mb-6 text-center">使用技巧</h3>
+            <div className="space-y-6">
+              <div className="bg-blue-50 rounded-lg p-6 border border-blue-200">
+                <h4 className="font-semibold text-blue-900 mb-3 flex items-center">
+                  <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  </svg>
+                  如何获取抖音视频链接？
+                </h4>
+                <p className="text-blue-800 text-sm leading-relaxed">
+                  在抖音APP中打开要下载的视频，点击右侧的"分享"按钮，选择"复制链接"即可获取视频链接。
+                  也可以点击"更多"选项中的"复制链接"功能。
+                </p>
+              </div>
+              <div className="bg-green-50 rounded-lg p-6 border border-green-200">
+                <h4 className="font-semibold text-green-900 mb-3 flex items-center">
+                  <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  </svg>
+                  下载失败怎么办？
+                </h4>
+                <p className="text-green-800 text-sm leading-relaxed">
+                  如果下载失败，请检查视频链接是否正确，确保视频为公开状态。
+                  部分私密视频或已删除视频无法下载。建议稍后重试或尝试其他视频。
+                </p>
+              </div>
+              <div className="bg-purple-50 rounded-lg p-6 border border-purple-200">
+                <h4 className="font-semibold text-purple-900 mb-3 flex items-center">
+                  <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+                  </svg>
+                  视频质量说明
+                </h4>
+                <p className="text-purple-800 text-sm leading-relaxed">
+                  下载的视频质量取决于原视频的上传质量。我们会尽力提供最高质量的版本，
+                  通常为720p或1080p高清画质，确保观看体验。
+                </p>
               </div>
             </div>
           </div>

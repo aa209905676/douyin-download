@@ -44,41 +44,32 @@
   animation: fadeIn 0.2s ease-out;
 }
 
-/* Google AdSense Styles */
+/* Google AdSense Styles - 优化以符合AdSense政策 */
 .adsense-container {
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
-  margin: 1rem 0;
-  padding: 0.5rem;
-  background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
-  border: 1px solid #e2e8f0;
-  border-radius: 12px;
+  margin: 2rem 0;
+  padding: 1rem;
+  background: #fafafa;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
   position: relative;
-  overflow: hidden;
-}
-
-.adsense-container::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 2px;
-  background: linear-gradient(90deg, #3b82f6, #8b5cf6, #06b6d4);
-  opacity: 0.6;
+  max-width: 100%;
 }
 
 .adsense-container .adsbygoogle {
-  border-radius: 8px;
+  border-radius: 4px;
   overflow: hidden;
+  max-width: 100%;
 }
 
 /* 响应式广告样式 */
 @media (max-width: 768px) {
   .adsense-container {
-    margin: 0.5rem 0;
-    padding: 0.25rem;
+    margin: 1.5rem 0;
+    padding: 0.75rem;
   }
 }
 
@@ -89,10 +80,10 @@
   align-items: center;
   justify-content: center;
   min-height: 90px;
-  color: #64748b;
+  color: #6b7280;
   font-size: 0.875rem;
-  background: #f8fafc;
-  border-radius: 8px;
+  background: #f9fafb;
+  border-radius: 4px;
 }
 
 .slide-in-from-top-2 {
